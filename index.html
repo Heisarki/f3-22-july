@@ -105,7 +105,7 @@
              justify-content: center;
              align-items: center;
              height: 132px;
-             gap: 120px;
+             gap: 75px;
              padding: 0 50px;
              width: 100%;
         }
@@ -119,7 +119,7 @@
 </head>
 <body>
     <div class="main-container">
-        <div class="container">
+        <div class="container" id ="containerId">
             <h1>Multiple Timers App</h1>
 
             <div class="set-timer" id="set">
@@ -137,7 +137,7 @@
             <button id="btn" style="background-color: #39393E;">Current Timers</button>
             <p id="no-timer">You have no timers currently</p>
 
-            <div class="set-timer" id="running">
+            <!-- <div class="set-timer" id="running">
                 <p>Time Left: </p>
                 <div class="input-timer">
                     <input placeholder="hh" type="number"/>
@@ -147,12 +147,13 @@
                     <input placeholder="ss" type="number"/>
                 </div>
                 <button id="click-stop" style="background-color: #F0F757; color: #000; width: 124px;">Stop</button>
-            </div>
-            <div class="time-over" id="over">
+            </div> -->
+
+            <!-- <div class="time-over" id="over">
                 <p></p>
                 <h2 style="font-size: 48px; color: #1D1D23;">Timer Is Up !</h2>
                 <button id="click-delete" style="background-color: #34344A; color: #ffffff; width: 124px;">Delete</button>
-            </div>
+            </div> -->
         </div>
     </div>
 
@@ -166,14 +167,232 @@
         const clickStop = document.getElementById("click-stop")
         const clickDelete = document.getElementById("click-delete")
 
+        const container = document.getElementById("containerId")
+
         const clickSet = document.getElementById("click-set")
 
-        let currentTimerCount = 0;
+    
+        const timerArray = []
+        let timerCount = 0;
 
         clickSet.addEventListener("click", (e) => {
-            // e.preventDefault()
-            currentTimerCount++;
-            console.log(currentTimerCount)
+            e.preventDefault();
+            // <div class="set-timer" id="running">
+            //     <p>Time Left: </p>
+            //     <div class="input-timer">
+            //         <input placeholder="hh" type="number"/>
+            //         <p style="font-size: 40px;">:</p>
+            //         <input placeholder="mm" type="number"/>
+            //         <p style="font-size: 40px;">:</p>
+            //         <input placeholder="ss" type="number"/>
+            //     </div>
+            //     <button id="click-stop" style="background-color: #F0F757; color: #000; width: 124px;">Stop</button>
+            // </div>
+
+
+            let currentSecond
+            let currentMinutes
+            let currentHours
+            let setFlag = false
+            let timeInterval
+
+            if (ssSet.value === "" && mmSet.value === "" && hhSet.value === ""){
+                alert("Please enter a time for the timer")
+                return
+            }
+
+            if (ssSet.value === ""){
+                currentSecond = 0
+                ssSet.value = 0
+            }
+            else{
+                currentSecond = parseInt(ssSet.value);
+            }
+
+            if (mmSet.value === ""){
+                currentMinutes = 0
+                mmSet.value = 0
+            }
+            else{
+                currentMinutes = parseInt(mmSet.value)
+
+            }
+            
+            if (hhSet.value === ""){
+                currentHours = 0
+                hhSet.value = 0
+            }
+            else{
+                currentHours = parseInt(hhSet.value)
+            }
+
+            // Checked if user entered invalid time
+            if (currentHours > 24){
+                alert("Maximum Timer limit is 24 hours")
+                hhSet.value = ""
+                mmSet.value = ""
+                ssSet.value = ""
+                return
+            }
+            if (currentMinutes > 59){
+                alert("Invalid minutes entered")
+                hhSet.value = ""
+                mmSet.value = ""
+                ssSet.value = ""
+                return
+            }
+            if (currentSecond > 59){
+                alert("Invalid seconds entered")
+                hhSet.value = ""
+                mmSet.value = ""
+                ssSet.value = ""
+                return
+            }
+
+            // ////////////////////////////////
+            // No timer left
+            timerCount++;
+            console.log("TIME COOUNT", timerCount)
+            if (timerCount > 0)
+                noTimer.style.display = "none" 
+
+            // Main timer div
+            const mainDiv = document.createElement("div")
+            mainDiv.classList.add("set-timer")
+            container.appendChild(mainDiv)
+
+            // Timer Left paragraph
+            const p = document.createElement("p")
+            p.textContent = "Time Left: "
+            mainDiv.appendChild(p)
+
+            // Time Input Container
+            const inputDiv = document.createElement("div")
+            inputDiv.classList.add("input-timer")
+            mainDiv.appendChild(inputDiv)
+
+            // Hour
+            const hourInput = document.createElement("input")
+            inputDiv.appendChild(hourInput)
+            hourInput.value = currentHours
+            // Colon seperator
+            const firstColon = document.createElement("p")
+            firstColon.textContent = ":"
+            firstColon.style.fontSize = "40px"
+            inputDiv.appendChild(firstColon)
+
+            // Minutes
+            const minutesInput = document.createElement("input")
+            inputDiv.appendChild(minutesInput)
+            minutesInput.value = currentMinutes
+            // Colon seperator
+            const secondColon = document.createElement("p")
+            secondColon.textContent = ":"
+            secondColon.style.fontSize = "40px"
+            inputDiv.appendChild(secondColon)
+
+            // Seconds
+            const secondsInput = document.createElement("input")
+            inputDiv.appendChild(secondsInput)
+            secondsInput.value = currentSecond
+
+            // Button
+            const button = document.createElement("button")
+            button.style.color = "#000"
+            button.style.backgroundColor = "#F0F757"
+            button.style.width = "124px"
+            button.textContent = "Stop"
+            mainDiv.appendChild(button)
+
+            button.addEventListener("click", () => {
+                mainDiv.style.display = "none"
+                timerCount--;
+                clearInterval(timeInterval)
+                if (timerCount === 0) {
+                    noTimer.style.display = "flex"
+                }
+            })
+
+            // <div class="time-over" id="over">
+            //     <p></p>
+            //     <h2 style="font-size: 48px; color: #1D1D23;">Timer Is Up !</h2>
+            //     <button id="click-delete" style="background-color: #34344A; color: #ffffff; width: 124px;">Delete</button>
+            // </div> 
+            // Done
+            const mainDoneDiv = document.createElement('div')
+            mainDoneDiv.classList.add("time-over")
+
+            const emptyP = document.createElement("p")
+            emptyP.textContent = "This is a "
+            emptyP.style.visibility = "hidden"
+            mainDoneDiv.appendChild(emptyP)
+
+            const h2 = document.createElement("h2")
+            h2.textContent = "Timer Is Up !"
+            h2.style.fontSize = "48px"
+            h2.style.color = "#1D1D23"
+            mainDoneDiv.appendChild(h2)
+
+            const doneButton = document.createElement("button")
+            doneButton.style.backgroundColor = "#34344A"
+            doneButton.style.color = "#fffff"
+            doneButton.style.width = "124px"
+            doneButton.textContent = "Delete"
+            mainDoneDiv.appendChild(doneButton)
+
+            doneButton.addEventListener("click", () => {
+                timerCount--;
+                if (timerCount === 0) {
+                    noTimer.style.display = "flex"
+                }
+                mainDoneDiv.style.display = "none"
+            })
+
+            
+
+            // clearing the hh : mm : ss
+            hhSet.value = ""
+            mmSet.value = ""
+            ssSet.value = ""
+
+            if (!setFlag){
+                    timeInterval = setInterval(() => {
+                    if(currentHours === 0 && currentMinutes === 0 && currentSecond === 0) {
+                        clearInterval(timeInterval)
+                        mainDiv.style.display = "none"
+                        container.appendChild(mainDoneDiv)
+                        // alert("Done !")
+                        return
+                    }
+                    if (currentSecond === 0){
+                        currentSecond = 59
+                        if (currentMinutes === 0 && currentHours === 0) {
+                            alert("Done !")
+                            return
+                        } else if (currentMinutes > 0) {
+                            currentMinutes--;
+                            minutesInput.value = currentMinutes
+                            // mmSet.value = currentMinutes
+                        } else if (currentMinutes === 0 && currentHours > 0) {
+                            currentMinutes = 59
+                            minutesInput.value = currentMinutes
+                            // mmSet.value = currentMinutes
+                            currentHours--;
+                            hourInput.value = currentHours
+                            // hhSet.value = currentHours
+                        }
+                    }
+                    currentSecond--;
+                    console.log(currentSecond)
+                    secondsInput.value = currentSecond
+                    // ssSet.value = currentSecond
+                }, 1)
+            }
+
+            console.log(setFlag)
+            if (setFlag)
+                clearInterval(timeInterval)
+            setFlag = !setFlag
         })
         clickStop.addEventListener("click", (e) => {
             // e.preventDefault()
