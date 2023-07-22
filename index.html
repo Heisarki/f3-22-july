@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500&family=Roboto:wght@500&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timer</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            color: #ffffff;
+            font-family: 'Roboto', sans-serif;
+        }
+        p{
+            font-size: 24px;;
+        }
+        h1{
+            font-size: 36px;
+        }
+        button {
+            height: 52px;
+            padding: 0 40px;
+            font-size: 18px;
+            border-radius: 26px;
+            outline: 0;
+            border: 0;
+        }
+        button:hover{
+            opacity: 0.9;
+        }
+        button:focus{
+            opacity: 0.8;
+        }
+
+        input::placeholder {
+            color: white;
+        }
+        input {
+            height: 56px;
+            width: 70px;
+            font-size: 40px;
+            background-color: #34344A;
+            border: none;
+            outline: none;
+            text-align: center;
+            color: #ffffff;
+        }
+        /* Hide the default number input spinners */
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+        }
+
+        /* input[type="number"] {
+        -moz-appearance: textfield;
+        } */
+
+        .main-container{
+            padding: 50px 0;
+            background-color: #1D1D23;
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            min-height: 100vh;
+            /* justify-content: center; */
+            align-items: center;
+        }
+
+        .container {
+            width: 849px;
+            background-color: #1D1D23;
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            min-height: 100vh;
+            /* justify-content: center; */
+            align-items: center;
+        }
+
+        .set-timer{
+            display: flex;
+            flex-direction: row;
+            background-color: #34344A;
+            border-radius: 20px;
+            height: max-content;
+             justify-content: center;
+             align-items: center;
+             height: 132px;
+             gap: 50px;
+             padding: 0 50px;
+             width: 100%;
+        }
+
+        .time-over{
+            display: flex;
+            flex-direction: row;
+            background-color: #F0F757;
+            border-radius: 20px;
+            height: max-content;
+             justify-content: center;
+             align-items: center;
+             height: 132px;
+             gap: 120px;
+             padding: 0 50px;
+             width: 100%;
+        }
+
+        .input-timer{
+            display: flex;
+            flex-direction: row;
+            gap: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <div class="container">
+            <h1>Multiple Timers App</h1>
+
+            <div class="set-timer" id="set">
+                <p>Set Time: </p>
+                <div class="input-timer">
+                    <input id="hh-set" placeholder="hh" type="number"/>
+                    <p style="font-size: 40px;">:</p>
+                    <input id="mm-set" placeholder="mm" type="number"/>
+                    <p style="font-size: 40px;">:</p>
+                    <input id="ss-set" placeholder="ss" type="number"/>
+                </div>
+                <button id="click-set" style="background-color: #F0F757; color: #000;  width: 124px;">Set</button>
+            </div>
+
+            <button id="btn" style="background-color: #39393E;">Current Timers</button>
+            <p id="no-timer">You have no timers currently</p>
+
+            <div class="set-timer" id="running">
+                <p>Time Left: </p>
+                <div class="input-timer">
+                    <input placeholder="hh" type="number"/>
+                    <p style="font-size: 40px;">:</p>
+                    <input placeholder="mm" type="number"/>
+                    <p style="font-size: 40px;">:</p>
+                    <input placeholder="ss" type="number"/>
+                </div>
+                <button id="click-stop" style="background-color: #F0F757; color: #000; width: 124px;">Stop</button>
+            </div>
+            <div class="time-over" id="over">
+                <p></p>
+                <h2 style="font-size: 48px; color: #1D1D23;">Timer Is Up !</h2>
+                <button id="click-delete" style="background-color: #34344A; color: #ffffff; width: 124px;">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const setTimer = document.getElementById("set")
+        const hhSet = document.getElementById("hh-set")
+        const mmSet = document.getElementById("mm-set")
+        const ssSet = document.getElementById("ss-set")
+        const overTimer = document.getElementById('over')
+        const noTimer = document.getElementById("no-timer")
+        const clickStop = document.getElementById("click-stop")
+        const clickDelete = document.getElementById("click-delete")
+
+        const clickSet = document.getElementById("click-set")
+
+        let currentTimerCount = 0;
+
+        clickSet.addEventListener("click", (e) => {
+            // e.preventDefault()
+            currentTimerCount++;
+            console.log(currentTimerCount)
+        })
+        clickStop.addEventListener("click", (e) => {
+            // e.preventDefault()
+            if (currentTimerCount === 0)
+                return
+            currentTimerCount--;
+            console.log(currentTimerCount)
+            if (currentTimerCount === 0)
+                noTimer.style.display = "none"
+        })
+        clickDelete.addEventListener("click", (e) => {
+            // e.preventDefault()
+            overTimer.style.display = "none"
+        })
+    </script>
+</body>
+</html>
